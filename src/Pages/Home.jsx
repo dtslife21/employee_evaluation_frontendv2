@@ -1,12 +1,12 @@
 import React from 'react';
 import Sidebar from '../Components/Sidebar';
 import Header from '../Components/Header';
-import EmployeeDetails from '../Components/EmployeeDetails';
-import EvaluationScore from '../Components/modals/EvaluationScore';
-import KPIScore from '../Components/KPIScore';
-import CompetenciesScore from '../Components/CompetenciesScore';
-import EmployeeSelection from '../Components/EmployeeSelection';
-import CategoryTabs from '../Components/CategoryTab';
+import EmployeeDetailsNonExc from '../Components/EmployeeDetailsNonExc';
+import EvaluationScoreNonExec from '../Components/modals/EvaluationScoreNonExec';
+import KPIScoreNonExc from '../Components/KPIScoreNonExc';
+import CompetenciesScoreNonExc from '../Components/CompetenciesScoreNonExc';
+import EmployeeSelectionNonExc from '../Components/EmployeeSelectionNonExc';
+import CategoryTabsNonExc from '../Components/CategoryTabNonExc';
 
 const ExecutivePage = () => {
   return (
@@ -23,16 +23,16 @@ const ExecutivePage = () => {
         <div className="flex flex-row p-4 gap-4">
           {/* Left Section */}
           <div className="flex flex-col flex-1 gap-4">
-            <EmployeeSelection />
-            <EmployeeDetails />
+            <EmployeeSelectionNonExc />
+            <EmployeeDetailsNonExc />
           </div>
 
           {/* Right Section */}
           <div className="flex flex-col flex-1 gap-4">
-            <EvaluationScore />
-            <CategoryTabs />
-            <KPIScore />
-            <CompetenciesScore />
+            <EvaluationScoreNonExec />
+            <CategoryTabsNonExc />
+            <KPIScoreNonExc />
+            <CompetenciesScoreNonExc />
           </div>
         </div>
       </div>

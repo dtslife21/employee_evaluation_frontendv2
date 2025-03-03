@@ -28,7 +28,7 @@ const Login = () => {
         title: "Login Successful",
         text: "Redirecting to your dashboard...",
       }).then(() => {
-        navigate("/executive"); 
+        navigate("/non-executive"); 
       });
   
     } else {

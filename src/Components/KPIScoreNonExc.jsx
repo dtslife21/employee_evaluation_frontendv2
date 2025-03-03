@@ -10,7 +10,7 @@ const KPIScore = () => {
       const serviceNo = localStorage.getItem("serviceNo");
       const year = localStorage.getItem("year");
       const period = localStorage.getItem("period");
-      const userType = localStorage.getItem("userType") || "Ex";
+      const userType = localStorage.getItem("userType") || "NonEx";
       try {
         const response = await fetch(
           `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetKPIDetails?serviceNo=${serviceNo}&year=${year}&peroid=${period}&UserType=${userType}`,

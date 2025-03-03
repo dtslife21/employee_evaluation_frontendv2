@@ -219,7 +219,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../../../src/Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 
 const EvaluationScore = () => {
   const [attendanceData, setAttendanceData] = useState(null);
@@ -352,7 +352,7 @@ const EvaluationScore = () => {
     const fetchCompetenciesScore = async () => {
       try {
         const serviceNo = localStorage.getItem("serviceNo");
-        const userType = localStorage.getItem("userType") || "Ex";
+        const userType = localStorage.getItem("userType") || "NonEx";
         const year = localStorage.getItem("year");
         const period = localStorage.getItem("period") ;
 
@@ -490,75 +490,52 @@ const EvaluationScore = () => {
 
   const calculatedTotal = (kpiScore || 0) + (competenciesScore || 0) + (hrAspectsScore || 0) + (totalCareerDevScore || 0);
 
-  const ScoreItem = ({ label, allocation, actual }) => (
-    <div className="mb-4 p-3 bg-gray-50 rounded shadow-sm">
-      <div className="flex justify-between items-center mb-2">
-        <span className="font-medium text-gray-700">{label}</span>
-        <span className="text-sm text-gray-500">{allocation}%</span>
-      </div>
-      <div className="text-right text-lg font-semibold">
-        {actual !== null ? actual.toFixed(2) : "0.00"}
-      </div>
-    </div>
-  );
-
   return (
-    <div className="w-full p-2">
-    <div className="bg-white shadow rounded-lg p-3 sm:p-4">
-      <h3 className="text-lg font-bold text-gray-700 mb-4">Evaluation Score</h3>
-      
-      {/* Responsive table with horizontal scroll on mobile */}
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-full align-middle">
-          <div className="overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-3 py-2 text-xs sm:text-sm text-left text-gray-700 whitespace-nowrap"></th>
-                  <th className="px-3 py-2 text-xs sm:text-sm text-center text-gray-700 whitespace-nowrap">KPI</th>
-                  <th className="px-3 py-2 text-xs sm:text-sm text-center text-gray-700 whitespace-nowrap">Competencies</th>
-                  <th className="px-3 py-2 text-xs sm:text-sm text-center text-gray-700 whitespace-nowrap">HR Aspects</th>
-                  <th className="px-3 py-2 text-xs sm:text-sm text-center text-gray-700 whitespace-nowrap">Career Development</th>
-                  <th className="px-3 py-2 text-xs sm:text-sm text-center text-gray-700 whitespace-nowrap bg-yellow-300">Total</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr>
-                  <td className="px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap bg-gray-50">Allocations</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-600 whitespace-nowrap">40%</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-600 whitespace-nowrap">40%</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-600 whitespace-nowrap">15%</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-600 whitespace-nowrap">5%</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-600 whitespace-nowrap bg-yellow-300">100%</td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap bg-gray-50">Actual</td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-800 whitespace-nowrap font-medium">
-                    {kpiScore !== null ? kpiScore.toFixed(2) : "0.00"}
-                  </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-800 whitespace-nowrap font-medium">
-                    {competenciesScore !== null ? competenciesScore.toFixed(2) : "0.00"}
-                  </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-800 whitespace-nowrap font-medium">
-                    {hrAspectsScore !== null ? hrAspectsScore.toFixed(2) : "0.00"}
-                  </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-800 whitespace-nowrap font-medium">
-                    {totalCareerDevScore !== null ? totalCareerDevScore.toFixed(2) : "0.00"}
-                  </td>
-                  <td className="px-3 py-2 text-xs sm:text-sm text-center text-gray-800 whitespace-nowrap font-medium bg-yellow-300">
-                    {calculatedTotal.toFixed(2)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <div>
+      <div className="bg-white shadow p-4 rounded mb-4">
+        <h3 className="text-lg font-bold text-gray-700 mb-4">Evaluation Score</h3>
+        <table className="table-auto w-full border">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th className="p-2 border"></th>
+              <th className="p-2 border">KPI</th>
+              <th className="p-2 border">Competencies</th>
+              <th className="p-2 border">HR Aspects</th>
+              <th className="p-2 border">Career Development</th>
+              <th className="p-2 border  bg-yellow-300">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-2 border text-center bg-gray-100">Allocations</td>
+              <td className="p-2 border text-center">40%</td>
+              <td className="p-2 border text-center">40%</td>
+              <td className="p-2 border text-center">15%</td>
+              <td className="p-2 border text-center">5%</td>
+              <td className="p-2 border text-center  bg-yellow-300">100%</td>
+            </tr>
+            <tr>
+            <td className="p-2 border text-center bg-gray-100">Actual</td>
+              <td className="p-2 border text-center">
+                {kpiScore !== null ? kpiScore.toFixed(2) : "0.00"}
+              </td>
+              <td className="p-2 border text-center">
+                {competenciesScore !== null ? competenciesScore.toFixed(2) : "0.00"}
+              </td>
+              <td className="p-2 border text-center">
+                {hrAspectsScore !== null ? hrAspectsScore.toFixed(2) : "0.00"}
+              </td>
+              <td className="p-2 border text-center">
+                {totalCareerDevScore !== null ? totalCareerDevScore.toFixed(2) : "0.00"}
+              </td>
+              <td className="p-2 border text-center  bg-yellow-300">
+                {calculatedTotal.toFixed(2)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      {/* Mobile Summary Cards - Shown below table */}
-      
     </div>
-  </div>
   );
 };
 

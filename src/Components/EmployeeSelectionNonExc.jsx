@@ -413,7 +413,7 @@
 
 
 import React, { useEffect, useState } from "react";
-import EMPModal from "../Components/modals/EMPModal";
+import EMPModalNonExec from "./modals/EMPModalNonExec";
 import Swal from "sweetalert2";
 import image1 from "../assets/images/executive.914c1c1e735aaecabb8f.png";
 import axios from "axios";
@@ -432,7 +432,7 @@ const EmployeeSelection = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const { request_token } = useAuth();
   const serviceNo = localStorage.getItem("username");
-  const userType = "Ex";
+  const userType = "NonEx";
   useEffect(() => {
     const storedEmployee = localStorage.getItem("employeeData");
     if (storedEmployee) {
@@ -679,7 +679,7 @@ const EmployeeSelection = () => {
               <label className="block text-sm font-medium text-gray-600 mb-1">
                 Category
               </label>
-              <select className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <select className="w-full border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" defaultValue="Non-Executive">
                 <option>Executive</option>
                 <option>Non-Executive</option>
               </select>
@@ -821,7 +821,7 @@ const EmployeeSelection = () => {
           <p>Loading employee data...</p>
         )}
       </div>
-      <EMPModal
+      <EMPModalNonExec
         isModalOpen={isModalOpen}
         toggleModal={toggleModal}
         onEmployeeSelect={handleEmployeeSelect}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import KPIModal from './modals/KPIModalNonExec';
-import CompetenciesModal from './modals/CompetenciesModalNonExec';
-import CareerDevelopmentModal from './modals/CareerDevelopmentModalNonExec';
-import HRAspectsModal from './modals/HRAspectsModalNonExec';
+import KPIModalNonExec from './modals/KPIModalNonExec';
+import CompetenciesModalNonExec from './modals/CompetenciesModalNonExec';
+import CareerDevelopmentModalNonExec from './modals/CareerDevelopmentModalNonExec';
+import HRAspectsModalNonExec from './modals/HRAspectsModalNonExec';
 
 const CategoryTab = () => {
   const [activePopup, setActivePopup] = useState(null);
@@ -37,14 +37,13 @@ const CategoryTab = () => {
         >
           HR Aspects
         </button>
-        
       </div>
 
       {/* Render Modals */}
-      {activePopup === 'KPI' && <KPIModal closePopup={closePopup} />}
-      {activePopup === 'Competencies' && <CompetenciesModal closePopup={closePopup} />}
-      {activePopup === 'CareerDevelopment' && <CareerDevelopmentModal closePopup={closePopup} />}
-      {activePopup === 'HRAspects' && <HRAspectsModal closePopup={closePopup} />}
+      {activePopup === 'KPI' && <KPIModalNonExec closePopup={closePopup} />}
+      {activePopup === 'Competencies' && <CompetenciesModalNonExec closePopup={closePopup} />}
+      {activePopup === 'CareerDevelopment' && <CareerDevelopmentModalNonExec closePopup={closePopup} />}
+      {activePopup === 'HRAspects' && <HRAspectsModalNonExec closePopup={closePopup} />}
     </div>
   );
 };

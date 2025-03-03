@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
-import EXecutiveKPI from "../Components/EXecutiveKPI";
+import EXecutiveKPINonExc from "../Components/EXecutiveKPINonExc";
 
 const EmployeeKPIEntry = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -27,7 +27,7 @@ const EmployeeKPIEntry = () => {
             {isModalOpen && <EXecutiveKPI closePopup={closePopup} />}
           </div> */}
           <div className="flex flex-col flex-1 gap-4">
-            <EXecutiveKPI />
+            <EXecutiveKPINonExc />
             {/* <EmployeeDetails /> */}
           </div>
         </div>

@@ -37,6 +37,7 @@ import Unkown from "./Pages/UnknownPage";
 import Header from "./Components/Header";
 import Sidebar from "./Components/Sidebar";
 
+
 // Create a wrapper component to handle location-based sidebar state
 const AppContent = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const location = useLocation();
@@ -86,6 +87,7 @@ const AppContent = ({ isSidebarOpen, setIsSidebarOpen }) => {
         <main className="p-4">
           <Routes>
             <Route path="/executive" element={<ExecutivePage />} />
+            <Route path="/nonexecutive" element={<NonExecutivePage />} />
             <Route path="/non-executive" element={<NonExecutivePage />} />
             <Route path="/kpi-entry" element={<EmployeeKPIEntry />} />
             <Route path="/home" element={<Home />} />

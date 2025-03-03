@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import HRAspectsModal from "./HRAspectsModal";
-import EvaluationScore from "./EvaluationScore";
+import HRAspectsModalNonExec from "./HRAspectsModalNonExec";
+import EvaluationScoreNonExec from "./EvaluationScoreNonExec";
 
 const ParentComponent = () => {
   const [hrAspectsScore, setHrAspectsScore] = useState(0);
@@ -13,10 +13,10 @@ const ParentComponent = () => {
 
   return (
     <>
-      <EvaluationScore hrAspectsScore={hrAspectsScore} />
+      <EvaluationScoreNonExec hrAspectsScore={hrAspectsScore} />
       <button onClick={() => setIsModalOpen(true)}>Open Modal</button>
       {isModalOpen && (
-        <HRAspectsModal 
+        <HRAspectsModalNonExec 
           onSave={handleSaveHrAspects} // Pass onSave prop
           closePopup={() => setIsModalOpen(false)} // Close modal
         />

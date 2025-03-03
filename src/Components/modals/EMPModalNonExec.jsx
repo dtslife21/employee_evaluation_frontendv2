@@ -524,7 +524,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useAuth } from "../../../src/Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 
 const EMPModal = ({ isModalOpen, toggleModal, onEmployeeSelect }) => {
   const [divisions, setDivisions] = useState([]);
@@ -538,7 +538,7 @@ const EMPModal = ({ isModalOpen, toggleModal, onEmployeeSelect }) => {
   const [error, setError] = useState("");
   const { request_token } = useAuth();
   const serviceNo = localStorage.getItem("username");
-  const userType = "Ex";
+  const userType = "NonEx";
 
   useEffect(() => {
     if (isModalOpen) {
