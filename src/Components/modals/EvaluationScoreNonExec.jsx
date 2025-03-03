@@ -21,7 +21,7 @@ const EvaluationScore = () => {
         const serviceNo = localStorage.getItem("serviceNo");
         const year = parseInt(localStorage.getItem("year"));
         const periodType = localStorage.getItem("period") || "defaultPeriod";
-        const userType = localStorage.getItem("userType") || "Ex";
+        const userType = localStorage.getItem("userType") || "NonEx";
         
         if (!serviceNo || !year) {
           setHrAspectsScore(0);

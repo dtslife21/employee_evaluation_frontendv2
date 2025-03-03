@@ -55,7 +55,7 @@ const CompetenciesModal = ({ closePopup, toggleModal }) => {
 
   const fetchExistingCompetencies = async () => {
     const serviceNo = localStorage.getItem("serviceNo");
-    const userType = localStorage.getItem("userType") || "EX";
+    const userType = localStorage.getItem("userType") || "NonEx";
     const year = localStorage.getItem("year");
     const period = localStorage.getItem("period") || "2";
     

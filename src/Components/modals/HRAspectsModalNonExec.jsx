@@ -15,7 +15,7 @@ const CourseDetailsModal = ({
   useEffect(() => {
     const fetchCourseGrades = async () => {
       try {
-        const userType = localStorage.getItem("userType") || "Ex";
+        const userType = localStorage.getItem("userType") || "NonEx";
         const request_token = localStorage.getItem("request_token");
 
         const response = await axios.get("/Evaluation/GetCourceGrade", {

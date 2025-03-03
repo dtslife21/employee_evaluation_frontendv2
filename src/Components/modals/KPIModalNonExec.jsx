@@ -33,7 +33,7 @@ const KPIModal = ({ closePopup }) => {
       const serviceNo = localStorage.getItem("serviceNo");
       const year = localStorage.getItem("year");
       const period = localStorage.getItem("period") || "2";
-      const userType = localStorage.getItem("userType") || "Ex";
+      const userType = localStorage.getItem("userType") || "NonEx";
       const requestToken = localStorage.getItem("request_token");
       if (!serviceNo || !year || !requestToken) {
         setLoading(false);

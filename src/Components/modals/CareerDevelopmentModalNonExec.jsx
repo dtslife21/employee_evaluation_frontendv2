@@ -44,7 +44,7 @@ const CareerDevelopmentModal = ({ closePopup }) => {
     const fetchData = async () => {
       try {
         const serviceNo = localStorage.getItem("serviceNo") || "0004536";
-        const userType = localStorage.getItem("userType") || "EX";
+        const userType = localStorage.getItem("userType") || "NonEx";
         const requestToken = localStorage.getItem("request_token");
         const year = localStorage.getItem("year");
         const period = localStorage.getItem("period") || "defaultPeriod";

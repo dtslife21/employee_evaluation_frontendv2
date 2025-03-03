@@ -15,7 +15,7 @@ const EMPModal = ({ isModalOpen, toggleModal, onEmployeeSelect }) => {
   const [error, setError] = useState("");
   const { request_token } = useAuth();
   const serviceNo = localStorage.getItem("username");
-  const userType = "Ex";
+  const userType = "NonEx";
 
   useEffect(() => {
     if (isModalOpen) {

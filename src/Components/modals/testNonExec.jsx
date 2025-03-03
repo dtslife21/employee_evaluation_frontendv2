@@ -62,7 +62,7 @@ const CareerDevelopmentModal = ({ closePopup }) => {
   const handleSave = async () => {
     setIsSaving(true);
     const serviceNo = localStorage.getItem("serviceNo") || "0004536";
-    const userType = localStorage.getItem("userType") || "EX";
+    const userType = localStorage.getItem("userType") || "NonEx";
     const requestToken = localStorage.getItem("request_token");
     const requestData = areaPlans.map((item) => ({
       Care_area: item.id, // Use the id from the areaPlans
