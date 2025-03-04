@@ -4,6 +4,116 @@
 // import { useAuth } from "../../../src/Context/AuthContext";
 // import { useNavigate } from "react-router-dom";
 
+
+// const CourseDetailsModal = ({ closePopup, workCategory = "", searchParam = "" }) => {
+//   const [trainingData, setTrainingData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     const fetchCourseGrades = async () => {
+//       try {
+//         const userType = localStorage.getItem("userType") || "Ex";
+//         const request_token = localStorage.getItem("request_token");
+
+//         const response = await axios.get("/Evaluation/GetCourceGrade", {
+//           params: {
+//             workCategory: workCategory || "",
+//             searchParam: searchParam || "",
+//             UserType: userType,
+//           },
+//           headers: {
+//             request_token,
+//           },
+//         });
+
+//         if (response.status === 200 && response.data.StatusCode === 200) {
+//           setTrainingData(response.data.ResultSet || []);
+//         } else {
+//           throw new Error(
+//             response.data.Message || "Failed to fetch course grades."
+//           );
+//         }
+//       } catch (error) {
+//         setError(error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchCourseGrades();
+//   }, [workCategory, searchParam]);
+
+
+
+
+//   return (
+//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+//       <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-4xl overflow-y-auto max-h-[90vh]">
+//         <div className="flex justify-between items-center mb-4">
+//           <h2 className="text-xl font-bold">Courses</h2>
+//           <button
+//             className="text-red-500 text-2xl font-semibold"
+//             onClick={closePopup}
+//           >
+//             &times;
+//           </button>
+//         </div>
+//         {loading ? (
+//           <p>Loading...</p>
+//         ) : error ? (
+//           <p className="text-red-500">Error: {error}</p>
+//         ) : (
+//           <table className="w-full table-auto border-collapse border border-gray-300">
+//             <thead className="bg-gray-200">
+//               <tr>
+//                 <th className="border border-gray-300 px-4 py-2">Action</th>
+//                 <th className="border border-gray-300 px-4 py-2">Course Name</th>
+//                 <th className="border border-gray-300 px-4 py-2">Course Grade</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {trainingData.length > 0 ? (
+//                 trainingData.map((course, index) => (
+//                   <tr key={index}>
+//                     <td className="border border-gray-300 px-4 py-2">
+//                       <input type="checkbox" />
+//                     </td>
+//                     <td className="border border-gray-300 px-4 py-2">
+//                       {course.CourseName}
+//                     </td>
+//                     <td className="border border-gray-300 px-4 py-2 text-center">
+//                       {course.CourseGrade}
+//                     </td>
+//                   </tr>
+//                 ))
+//               ) : (
+//                 <tr>
+//                   <td
+//                     colSpan="3"
+//                     className="text-center border border-gray-300 px-4 py-2"
+//                   >
+//                     No courses found.
+//                   </td>
+//                 </tr>
+//               )}
+//             </tbody>
+//           </table>
+//         )}
+//         <div className="flex justify-end mt-4">
+//           <button
+//             className="bg-blue-500 text-white px-4 py-2 rounded"
+//             onClick={closePopup}
+//           >
+//             Close
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+
 // const HRAspectsModal = ({ closePopup, toggleModal,onSave }) => {
 //   const [trainingData, setTrainingData] = useState([]);
 //   const [trainingData1, setTrainingData1] = useState([]);
@@ -35,7 +145,7 @@
 //   const [attendanceDetails, setAttendanceDetails] = useState([]);
 //   const { request_token } = useAuth();
 //   const [shortLeave, setShortLeave] = useState(0);
-//   const [Short_leave, setShort_leave] = useState(0);
+
 //   const [employee, setEmployee] = useState(null);
 //   const [lateOccasions, setLateOccasions] = useState(0);
 //   const [extraHours, setExtraHours] = useState(0);
@@ -60,6 +170,8 @@
 //         const year = parseInt(localStorage.getItem("year"));
 //         const periodType = localStorage.getItem("period") || "defaultPeriod";
 //         const userType = localStorage.getItem("userType") || "Ex";
+
+
 //         const response = await axios.get(
 //           "/Evaluation/GetTrainingIdentificationData",
 //           {
@@ -153,6 +265,8 @@
 //     fetchCriticalIncidents();
 //   }, []);
 
+
+
 //   useEffect(() => {
 //     const fetchOffencesData = async () => {
 //       try {
@@ -187,6 +301,7 @@
 
 //     fetchOffencesData();
 //   }, []);
+
 
 //   useEffect(() => {
 //     const fetchCommendationData = async () => {
@@ -226,6 +341,10 @@
 //     fetchCommendationData();
 //   }, []);
 
+
+
+
+
 //   useEffect(() => {
 //     const fetchAttendanceSummary = async () => {
 //       try {
@@ -233,9 +352,9 @@
 //         const year = parseInt(localStorage.getItem("year"));
 //         const periodType = localStorage.getItem("period") || "defaultPeriod";
 //         const userType = localStorage.getItem("userType") || "Ex";
-  
+
 //         const response = await axios.get(
-//           "http://localhost:57587/Evaluation/GetAttendanceSummaryData",
+//           "/Evaluation/GetAttendanceSummaryData",
 //           {
 //             params: {
 //               serviceNo,
@@ -248,39 +367,27 @@
 //             },
 //           }
 //         );
-  
 //         const result = response.data.ResultSet;
-  
-//         if (result && result.AttendanceSummaryDataGrid1.length === 0 && result.AttendanceSummaryDataGrid2.length === 0) {
-//           // Clear localStorage if the response is empty
-//           localStorage.removeItem("serviceNo");
-//           localStorage.removeItem("year");
-//           localStorage.removeItem("period");
-//           localStorage.removeItem("userType");
-  
-//           setAttendanceDetails([]);
-//           setAttendanceSummary([]);
-          
-//         } else {
-//           // If there's data, set the state as usual
-//           setShortLeave(parseInt(result.Short_leave, 10) || 0);
-//           setAttendanceDetails(result.AttendanceSummaryDataGrid2);
-//           setAttendanceSummary(result.AttendanceSummaryDataGrid1);
-//           setLateOccasions(result.Late_occassions);
-//           setExtraHours(result.Extra_Hours_Performed);
-//         }
+//         setShortLeave(parseInt(result.Short_leave, 10) || 0);
+//         setAttendanceDetails(result.AttendanceSummaryDataGrid2);
+//         setAttendanceSummary(result.AttendanceSummaryDataGrid1);
+//         setLateOccasions(result.Late_occassions);
+//         setExtraHours(result.Extra_Hours_Performed);
 //         setIsLoading(false);
 //       } catch (error) {
 //         console.error("Error fetching attendance summary data:", error);
 //         setIsLoading(false);
 //       }
 //     };
+
 //     fetchAttendanceSummary();
 //   }, []);
-  
+
 //   const CourcetoggleModal = () => {
 //     setIsModalOpen(!isModalOpen);
 //   };
+
+
 //   // Calculate the percentage of short leave taken
 //   const totalShortLeave = 24;
 //   const shortLeavePercentage =
@@ -313,6 +420,7 @@
 //     leaveDescription
 //   );
 
+
 //   const calculationResult = lateOccasions <= 5 ? 1 : 0;
 //   const allocatedMaxScores = {
 //     "Annual Leave": 4,
@@ -320,7 +428,10 @@
 //     "Sick Leave": 1,
 //   };
 
+
 //   const extraHoursPercentage = 500 > 0 ? (extraHours / 2080) * 100 : 0;
+
+  
 //   const calculatedValue =
 //     extraHoursPercentage <= 15
 //       ? 0
@@ -328,6 +439,8 @@
 //         ? 2
 //         : 1;
 
+
+    
 //   const totalActualScore = attendanceSummary.reduce((total, item) => {
 //     const totalVal = parseFloat(item.Total) || 0;
 //     const takenVal = parseFloat(item.Taken) || 0;
@@ -346,6 +459,8 @@
 //     return total + actualScore;
 //   }, 0);
 
+
+
 //   const calculateTotalScore = () => {
 //     const totalActualScore = attendanceDetails.reduce((total, item) => {
 //       const maxScore = item.LeaveType === "Nopay" ? 2 : 1;
@@ -355,6 +470,8 @@
 
 //     return totalActualScore;
 //   };
+
+
 //   const year = localStorage.getItem("year");
 
 //   return (
@@ -373,19 +490,25 @@
 //             &times;
 //           </button>
 //         </div>
+
 //         {/********************************************* Attendance Summary Section ****************************************************/}
 //         <div className="p-4 space-y-6">
 //           {/* Attendance Summary Section */}
+
 //           {/* Attendance Summary Section */}
+
 //           {/* Attendance Summary */}
-//           {(shortLeave || lateOccasions || extraHoursPercentage) ? (
 //           <div className="p-6 rounded-lg shadow-md space-y-4">
 //             <h2 className="text-lg font-semibold">
 //               (B). ATTENDANCE SUMMARY {year}.01.01
 //             </h2>
 //             <div className="grid grid-cols-2 gap-4">
+
+
+
 //               {/********************************************* Left Side Tables ***************************************/}
 //               <div className="space-y-4">
+
 //                 {/* Table 1 */}
 //                 <table className="table-auto w-full border-collapse border border-gray-300">
 //                   <thead>
@@ -414,6 +537,8 @@
 //                     })}
 //                   </tbody>
 //                 </table>
+
+
 //                 {/* Table 2 */}
 //                 <table className="table-auto border-collapse border border-gray-300">
 //                   <thead>
@@ -431,6 +556,7 @@
 //                     ))}
 //                   </tbody>
 //                 </table>
+
 //                 {/* Table 3 */}
 //                 <table className="table-auto border-collapse border border-gray-300">
 //                   <thead>
@@ -442,6 +568,9 @@
 //                     </tr>
 //                   </thead>
 //                   <tbody>
+
+
+
 //                     <tr>
 //                       <td className="border px-4 py-2">Short Leave Taken</td>
 //                       <td className="border px-4 py-2 text-center">24</td>
@@ -452,6 +581,7 @@
 //                     </tr>
 //                   </tbody>
 //                 </table>
+
 //                 {/* Table 4 */}
 //                 <table className="table-auto border-collapse border border-gray-300">
 //                   <thead>
@@ -467,6 +597,7 @@
 //                     </tr>
 //                   </tbody>
 //                 </table>
+
 //                 {/* Table 5 */}
 //                 <table className="table-auto border-collapse border border-gray-300">
 //                   <thead>
@@ -477,7 +608,8 @@
 //                   </thead>
 //                   <tbody>
 //                     <tr>
-//                       <td className="border px-4 py-2">Extra Hours Performed</td>                   
+//                       <td className="border px-4 py-2">Extra Hours Performed</td>
+                      
 //                       <td className="border px-4 py-2 text-center">
 //                         {extraHoursPercentage.toFixed(2)}%
 //                       </td>
@@ -485,6 +617,9 @@
 //                   </tbody>
 //                 </table>
 //               </div>
+
+
+
 //               {/************************************************* Right Side Tables ***************************************/}
 //               <div className="space-y-4">
 //                 {/* Table 6 */}
@@ -510,7 +645,10 @@
 //                           <td className="border px-4 py-2 text-center"
 //                             style={{ backgroundColor: "rgb(253, 242, 233)" }}
 //                           >{actualScore}</td>
+
+
 //                           <td className="border px-4 py-2 text-center">{allocatedMaxScore}</td>
+
 //                         </tr>
 //                       );
 //                     })}
@@ -539,10 +677,14 @@
 //                     </tbody>
 //                   </table>
 //                 </div>
+
+
+
 //                 <div className="relative pt-10">
 //                   {/* Table 8 */}
 //                   <table className="table-auto w-1/2 border-collapse border border-gray-300">
 //                     <thead>
+
 //                     </thead>
 //                     <tbody>
 //                       <tr>
@@ -554,6 +696,8 @@
 //                     </tbody>
 //                   </table>
 //                 </div>
+
+
 //                 {/* Table 9 */}
 //                 <div className="relative pt-10">
 //                   <table className="table-auto w-1/2 border-collapse border border-gray-300">
@@ -562,11 +706,13 @@
 //                     </thead>
 //                     <tbody>
 //                       <tr>
+
 //                         <td
 //                           style={{ backgroundColor: "rgb(253, 242, 233)" }}
 //                           className="border px-4 py-2 text-center">{calculationResult}</td>
 //                         <td
 //                           className="border px-4 py-2 text-center"
+
 //                         >
 //                           1
 //                         </td>
@@ -579,14 +725,17 @@
 //                 <div className="relative pt-10">
 //                   <table className="table-auto w-1/2 border-collapse border border-gray-300">
 //                     <thead>
+
 //                     </thead>
 //                     <tbody>
 //                       <tr>
+
 //                         <td className="border px-4 py-2 text-center"
 //                           style={{ backgroundColor: "rgb(253, 242, 233)" }}
 //                         >{calculatedValue}</td>
 //                         <td
 //                           className="border px-4 py-2 text-center"
+
 //                         >
 //                           2
 //                         </td>
@@ -601,9 +750,13 @@
                  
 //                 </div>
 //               </div>
+              
 //             </div>
 //           </div>
-//         ) : null}       
+          
+
+
+
 //           {/************************************  Disciplinary Actions Section ******************************************/}
 //           <div className="p-6 rounded-lg shadow-md">
 //             <h2 className="text-lg font-semibold mb-4">
@@ -787,22 +940,603 @@
 //             </div>
 //           </div>
 //         </div>
-//         <div className="flex justify-end mt-4">
-//         <button
+
+
+
+//         {/*****************************************************************  New Sections *******************************************/}
+//         <div className="space-y-6">
+//           {/* Evaluation - Performance Criteria Section */}
+//           {/* Evaluation - Performance Criteria Section */}
+//           {/* <div className="p-6 rounded-lg shadow-md">
+//             <div className="flex justify-between items-center">
+//               <h2 className="text-lg font-semibold">
+//                 (E). EVALUATION - PERFORMANCE CRITERIA <br />
+//                 (To be evaluated by the Section)
+//               </h2>
+//               <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
+//                 Increment Allocation
+//               </button>
+//             </div>
+//             <div className="space-y-4 mt-4">
+
+
+              
+//               <ul className="list-disc pl-6 space-y-2">
+//                 <li className="bg-gray-200 p-2 rounded">
+//                   A. ACHIEVEMENT ORIENTATION
+//                 </li>
+//                 <li className="bg-gray-200 p-2 rounded">
+//                   B. PEOPLE ORIENTATION
+//                 </li>
+//                 <li className="bg-gray-200 p-2 rounded">
+//                   C. MANAGERIAL ORIENTATION
+//                 </li>
+//                 <li className="bg-gray-200 p-2 rounded">
+//                   D. ADAPTIVE ORIENTATION
+//                 </li>
+//               </ul>
+
+              
+//               <div className="grid grid-cols-2 gap-4 items-center">
+//                 <div>
+//                   <label className="block font-semibold mb-1">
+//                     Achievements Orientation
+//                   </label>
+//                   <input
+//                     type="number"
+//                     name="achievements"
+//                     value={marks.achievements}
+//                     onChange={handleInputChange}
+//                     className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                   />
+//                 </div>
+//                 <div>
+//                   <label className="block font-semibold mb-1">
+//                     People Orientation
+//                   </label>
+//                   <input
+//                     type="number"
+//                     name="people"
+//                     value={marks.people}
+//                     onChange={handleInputChange}
+//                     className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                   />
+//                 </div>
+//                 <div>
+//                   <label className="block font-semibold mb-1">
+//                     Managerial Orientation
+//                   </label>
+//                   <input
+//                     type="number"
+//                     name="managerial"
+//                     value={marks.managerial}
+//                     onChange={handleInputChange}
+//                     className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                   />
+//                 </div>
+//                 <div>
+//                   <label className="block font-semibold mb-1">
+//                     Adaptive Orientation
+//                   </label>
+//                   <input
+//                     type="number"
+//                     name="adaptive"
+//                     value={marks.adaptive}
+//                     onChange={handleInputChange}
+//                     className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                   />
+//                 </div>
+//               </div>
+//               <div className="text-right font-semibold text-blue-600 mt-4">
+//                 Total Marks (Out of 100): {calculateTotal()}
+//               </div>
+//             </div>
+//           </div> */}
+
+
+//           {/************************************************  Evaluation discussed with the Employee Section *********************************/}
+//           <div className="p-6 rounded-lg shadow-md">
+//             <div className="flex items-center justify-between">
+//               <h2 className="text-lg font-semibold">
+//                 Evaluation discussed with the Employee:
+//               </h2>
+//               <div className="flex items-center space-x-4">
+//                 <label>
+//                   <input
+//                     type="radio"
+//                     name="evaluation"
+//                     value="yes"
+//                     className="mr-2"
+//                   />
+//                   Yes
+//                 </label>
+//                 <label>
+//                   <input
+//                     type="radio"
+//                     name="evaluation"
+//                     value="no"
+//                     className="mr-2"
+//                   />
+//                   No
+//                 </label>
+//               </div>
+//             </div>
+//             <div className="mt-4">
+//               <label className="block font-semibold mb-1">
+//                 Recommended Increments:
+//               </label>
+//               <input
+//                 type="text"
+//                 className="w-full border border-gray-300 rounded p-2"
+//               />
+//             </div>
+//           </div>
+
+
+//           {/********************************************* Commendation and Recommendation Section **********************************/}
+//           <div className="p-6 rounded-lg shadow-md">
+//             <h2 className="text-lg font-semibold mb-4">
+//               Commendation and Recommendation
+//             </h2>
+//             <div className="space-y-6">
+
+
+//               {/*********************************************  Special Comments by Department Head ***********************************/}
+//               <div>
+//                 <label className="block font-semibold mb-1">
+//                   Special Comments by Department Head
+//                 </label>
+//                 <textarea
+//                   rows="3"
+//                   className="w-full border border-gray-300 rounded p-2"
+//                 ></textarea>
+//                 <div className="flex items-center space-x-4 mt-2">
+//                   <label>
+//                     <input type="checkbox" className="mr-2" />
+//                     Departmental Head
+//                   </label>
+//                   <label>
+//                     <input type="checkbox" className="mr-2" />
+//                     Promotion Recommended
+//                   </label>
+//                 </div>
+//               </div>
+
+
+//               {/***************************************** Recommendation by Division Head *****************************************/}
+//               <div>
+//                 <label className="block font-semibold mb-1">
+//                   Recommendation by Division Head
+//                 </label>
+//                 <textarea
+//                   rows="3"
+//                   className="w-full border border-gray-300 rounded p-2"
+//                 ></textarea>
+//                 <div className="flex items-center space-x-4 mt-2">
+//                   <label>
+//                     <input type="checkbox" className="mr-2" />
+//                     Division Head
+//                   </label>
+//                   <label>
+//                     <input type="checkbox" className="mr-2" />
+//                     Promotion recommended and approved
+//                   </label>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//         <br />
+
+
+//         {/***************************************** Special Evaluation Section *****************************************/}
+//         <div className="bg-gray-50  rounded-lg shadow-md">
+//           <h2 className="text-lg font-semibold mb-4 text-white bg-blue-600 p-2 uppercase">
+//             Special Evaluation
+//           </h2>
+
+
+//           {/***************************************** Recommendation *****************************************/}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-1">
+//               * Do you recommend the above employee to be granted with "Special
+//               Additional" salary increments with regard to any exceptional
+//               performance/characteristics demonstrated by him/her?
+//             </label>
+//             <div className="flex items-center space-x-4">
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="special_increment"
+//                   value="yes"
+//                   className="mr-2"
+//                 />
+//                 Yes
+//               </label>
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="special_increment"
+//                   value="no"
+//                   className="mr-2"
+//                 />
+//                 No
+//               </label>
+//             </div>
+//           </div>
+
+
+//           {/* Number of increments */}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-1">
+//               If yes, Number of special additional increments recommended:
+//             </label>
+//             <div className="flex space-x-4">
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="increment_number"
+//                   value="1"
+//                   className="mr-2"
+//                 />
+//                 1
+//               </label>
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="increment_number"
+//                   value="2"
+//                   className="mr-2"
+//                 />
+//                 2
+//               </label>
+//             </div>
+//           </div>
+
+
+//           {/* Justification */}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-1">Justification</label>
+//             <textarea
+//               rows="3"
+//               className="w-full border border-gray-300 rounded p-2"
+//               placeholder="Please justify your recommendation"
+//             ></textarea>
+//           </div>
+
+
+//           {/* Justification categories */}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-2">
+//               Your justification mainly falls under:
+//             </label>
+//             <div className="grid grid-cols-2 gap-4">
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Great Commitment Work
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Outstanding Contribution
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Cost Saving
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Unique Feat
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Important Suggestion
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Customer Satisfaction
+//               </label>
+//               <label>
+//                 <input type="checkbox" className="mr-2" />
+//                 Innovation
+//               </label>
+//               <label className="col-span-2">
+//                 <input type="checkbox" className="mr-2" />
+//                 Other (Please specify):
+//                 <textarea
+//                   rows="2"
+//                   className="w-full border border-gray-300 rounded mt-2 p-2"
+//                   placeholder="Specify other reasons..."
+//                 ></textarea>
+//               </label>
+//             </div>
+//           </div>
+
+
+//           {/* Recommended by */}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-1">Recommended By:</label>
+//             <input
+//               type="text"
+//               className="w-full border border-gray-300 rounded p-2"
+//               placeholder="Enter recommender's name"
+//             />
+//           </div>
+
+
+//           {/***************************************** Total increments *****************************************/}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-1">
+//               Total Increments:
+//             </label>
+//             <input
+//               type="number"
+//               className="w-full border border-gray-300 rounded p-2"
+//               placeholder="Enter total increments"
+//             />
+//           </div>
+
+
+//           {/***************************************** Department Head Recommendation *****************************************/}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-2">
+//               Recommendation of Departmental Head
+//             </label>
+//             <div className="flex space-x-4">
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="dept_head_recommendation"
+//                   value="recommended"
+//                   className="mr-2"
+//                 />
+//                 Special Increments Recommended
+//               </label>
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="dept_head_recommendation"
+//                   value="not_recommended"
+//                   className="mr-2"
+//                 />
+//                 Special Increments Not Recommended
+//               </label>
+//             </div>
+//             <textarea
+//               rows="2"
+//               className="w-full border border-gray-300 rounded mt-2 p-2"
+//               placeholder="Add comments (if any)..."
+//             ></textarea>
+//           </div>
+
+
+//           {/***************************************** Division Head Approval *****************************************/}
+//           <div className="mb-4">
+//             <label className="block font-semibold mb-2">
+//               Approval of Division Head
+//             </label>
+//             <div className="flex space-x-4">
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="division_head_approval"
+//                   value="approved"
+//                   className="mr-2"
+//                 />
+//                 Special Increments Approved
+//               </label>
+//               <label>
+//                 <input
+//                   type="radio"
+//                   name="division_head_approval"
+//                   value="not_approved"
+//                   className="mr-2"
+//                 />
+//                 Special Increments Not Approved
+//               </label>
+//             </div>
+//             <textarea
+//               rows="2"
+//               className="w-full border border-gray-300 rounded mt-2 p-2"
+//               placeholder="Add comments (if any)..."
+//             ></textarea>
+//           </div>
+//         </div>
+//         <div className="p-6 rounded-lg shadow-md">
+//           <div className="bg-white p-6 rounded-lg shadow-md">
+
+
+//             {/***************************************** {raining Attended} *****************************************/}
+
+//             <h2 className="text-lg font-semibold mb-4">Training Attended</h2>
+//             <div className="overflow-x-auto">
+//               <table className="w-full table-auto border-collapse border border-gray-300">
+//                 <thead className="bg-gray-200">
+//                   <tr>
+//                     <th className="border border-gray-300 px-4 py-2">#</th>
+//                     <th className="border border-gray-300 px-4 py-2">Year</th>
+//                     <th className="border border-gray-300 px-4 py-2">Month</th>
+//                     <th className="border border-gray-300 px-4 py-2">
+//                       Course Name
+//                     </th>
+//                     <th className="border border-gray-300 px-4 py-2">Status</th>
+//                     <th className="border border-gray-300 px-4 py-2">Skill</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {isLoading ? (
+//                     <tr>
+//                       <td
+//                         colSpan="3"
+//                         className="text-center border border-gray-300 px-4 py-2"
+//                       >
+//                         Loading...
+//                       </td>
+//                     </tr>
+//                   ) : trainingData.length > 0 ? (
+//                     trainingData.map((course, index) => (
+//                       <tr
+//                         key={index}
+//                         className={`${course.Status === "Not Completed" ? "bg-red-100" : ""
+//                           }`}
+//                       >
+//                         <td className="border border-gray-300 px-4 py-2 text-center">
+//                           {index + 1}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2">
+//                           {course.Year}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2">
+//                           {course.Month}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2">
+//                           {course.CourseName}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2 text-center">
+//                           {course.Status}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2">
+//                           {course.Skill}
+//                         </td>
+//                       </tr>
+
+//                     ))
+//                   ) : (
+//                     <tr>
+//                       <td
+//                         colSpan="3"
+//                         className="text-center border border-gray-300 px-4 py-2"
+//                       >
+//                         No data found.
+//                       </td>
+//                     </tr>
+//                   )}
+//                 </tbody>
+//               </table>
+//             </div>
+
+//             {/***************************************** Training needs identification *****************************************/}
+
+
+//             <div className="mt-6">
+//               <h3 className="font-semibold mb-2">
+//                 Training needs Identification
+//               </h3>
+//               <p className="text-gray-600 mb-4">
+//                 Please click the button to select courses
+//               </p>
+//               <button
+//                 onClick={CourcetoggleModal}
+//                 className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
+//               >Course details
+//               </button>
+//               {isModalOpen && <CourseDetailsModal closePopup={CourcetoggleModal} />}
+//             </div>
+
+//             {/***************************************** Course selection *****************************************/}
+
+
+
+
+//             <div className="mt-6">
+//               <table className="w-full table-auto border-collapse border border-gray-300">
+//                 <thead className="bg-gray-200">
+//                   <tr>
+//                     <th className="border border-gray-300 px-4 py-2">#</th>
+//                     <th className="border border-gray-300 px-4 py-2">Course Name</th>
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   {trainingData1.length > 0 ? (
+//                     trainingData1.map((course, index) => (
+//                       <tr key={index}>
+//                         <td className="border border-gray-300 px-4 py-2 text-center">
+//                           {index + 1}
+//                         </td>
+//                         <td className="border border-gray-300 px-4 py-2">
+//                           {course.CourseName}
+//                         </td>
+//                       </tr>
+//                     ))
+//                   ) : (
+//                     <tr>
+//                       <td
+//                         colSpan="2"
+//                         className="text-center border border-gray-300 px-4 py-2"
+//                       >
+//                         No courses found.
+//                       </td>
+//                     </tr>
+//                   )}
+//                 </tbody>
+//               </table>
+//             </div>
+
+
+
+
+//             {/***************************************** Additional training requirement *****************************************/}
+//             <div className="mt-6">
+//               <h3 className="font-semibold mb-2">
+//                 Any other training requirement
+//               </h3>
+//               <textarea
+//                 className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                 rows="4"
+//                 placeholder="Enter details here..."
+//               ></textarea>
+//             </div>
+
+//             {/***************************************** Additional input *****************************************/}
+//             <div className="mt-4 flex space-x-4">
+//               <div>
+//                 <label className="inline-flex items-center">
+//                   <input
+//                     type="checkbox"
+//                     className="form-checkbox text-blue-600"
+//                   />
+//                   <span className="ml-2">Division Head</span>
+//                 </label>
+//               </div>
+//               <div className="flex-grow">
+//                 <input
+//                   type="text"
+//                   className="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+//                   placeholder="Enter details"
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+
+
+//         {/***************************************** Close Button *****************************************/}
+//         <div className="flex mt-6">
+//           <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
+//             Save
+//           </button>
+//           <button
 //             className="bg-red-500 text-white px-4 py-2 rounded"
 //             onClick={closePopup}
 //           >
+
 //             Close
 //           </button>
-//           </div>
+//         </div>
 //       </div>
 //     </div>
 //   );
+  
+  
+
 // };
 
 
 // export default HRAspectsModal;
 
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 import axios from "axios";
@@ -1041,7 +1775,7 @@ const HRAspectsModal = ({ closePopup, toggleModal,onSave }) => {
         const userType = localStorage.getItem("userType") || "Ex";
   
         const response = await axios.get(
-          "http://localhost:57587/Evaluation/GetAttendanceSummaryData",
+          "https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetAttendanceSummaryData",
           {
             params: {
               serviceNo,
@@ -1540,64 +2274,64 @@ const HRAspectsModal = ({ closePopup, toggleModal,onSave }) => {
 
           {/************************************************  Critical Incidents Section ********************************/}
           <div className="p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-4">
-              (D). CRITICAL INCIDENTS {year}.01.01
-            </h2>
-            <div>
-              {/* Critical Incidents Table */}
-              <h3 className="font-semibold mb-2">Commendations</h3>
-              <table className="table-auto border-collapse border border-gray-300 w-full">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-2">#</th>
-                    <th className="border border-gray-300 px-4 py-2">Date</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Evaluation
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">Status</th>
+          <h2 className="text-lg font-semibold mb-4">
+            (D). CRITICAL INCIDENTS {year}.01.01
+          </h2>
+          <div className="overflow-x-auto"> {/* Added overflow-x-auto */}
+            {/* Critical Incidents Table */}
+            <h3 className="font-semibold mb-2">Commendations</h3>
+            <table className="table-auto border-collapse border border-gray-300 w-full min-w-[600px]"> {/* Added min-width */}
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-4 py-2">#</th>
+                  <th className="border border-gray-300 px-4 py-2">Date</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Evaluation
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="text-center border border-gray-300 px-4 py-2"
+                    >
+                      Loading...
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {isLoading ? (
-                    <tr>
-                      <td
-                        colSpan="4"
-                        className="text-center border border-gray-300 px-4 py-2"
-                      >
-                        Loading...
+                ) : criticalIncidents.length > 0 ? (
+                  criticalIncidents.map((item, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(item.Date).toLocaleDateString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {item.Evaluation}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {item.Status}
                       </td>
                     </tr>
-                  ) : criticalIncidents.length > 0 ? (
-                    criticalIncidents.map((item, index) => (
-                      <tr key={index}>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                          {index + 1}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {new Date(item.Date).toLocaleDateString()}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {item.Evaluation}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2">
-                          {item.Status}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="4"
-                        className="text-center border border-gray-300 px-4 py-2"
-                      >
-                        No data found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="text-center border border-gray-300 px-4 py-2"
+                    >
+                      No data found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+        </div>
         </div>
         <div className="flex justify-end mt-4">
         <button

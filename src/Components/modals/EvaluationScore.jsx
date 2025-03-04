@@ -356,12 +356,13 @@ const EvaluationScore = () => {
         const year = localStorage.getItem("year");
         const period = localStorage.getItem("period") ;
 
+
         if (!serviceNo || !year) {
           setHrAspectsScore(0);
           return;
         }
 
-        const response = await axios.get("https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetCompetenciesDetails", {
+        const response = await axios.get("https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetCompetenciesDetails?status=D", {
           params: { serviceNo, UserType: userType, period, year },
           headers: { request_token },
         });
@@ -424,7 +425,7 @@ const EvaluationScore = () => {
         }
       });
     
-      // New calculation logic
+      
       const divisionScore = (divisionTotal / 5) * 2;
       const departmentScore = (departmentTotal / 5) * 2;
       const selfScore = selfTotal / 5;

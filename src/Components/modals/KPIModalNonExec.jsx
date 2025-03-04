@@ -23,6 +23,7 @@
 
 // export default KPIModal;
 
+
 import React, { useEffect, useState } from "react";
 const KPIModal = ({ closePopup }) => {
   const [kpiData, setKpiData] = useState([]);

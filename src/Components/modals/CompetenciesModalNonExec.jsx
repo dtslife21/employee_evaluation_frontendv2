@@ -1,33 +1,198 @@
-// import React from 'react';
-
-// const CompetenciesModal = ({ closePopup }) => (
-//   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//     <div className="relative bg-white p-6 rounded shadow-lg"> {/* Added 'relative' */}
-//       <button
-//         className="absolute top-2 right-2 text-red-500 text-2xl font-bold focus:outline-none"
-//         onClick={closePopup}
-//       >
-//         &times;
-//       </button>
-//       <h2 className="text-xl font-bold mb-4">Competencies</h2>
-//       <p>This is the content for the Competencies Non Executive.</p>
-//       <button
-//         className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-//         onClick={closePopup}
-//       >
-//         Close
-//       </button>
-//     </div>
-//   </div>
-// );
-
-// export default CompetenciesModal;
 
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-
 const CompetenciesModal = ({ closePopup, toggleModal }) => {
+  const [activeTab, setActiveTab] = useState("self");
+  const [selfSelections, setSelfSelections] = useState({}); 
+  const [superiorSelections, setSuperiorSelections] = useState({}); 
+  const [disabledOptions, setDisabledOptions] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showSuperiorTab, setShowSuperiorTab] = useState(false); 
+  const [showSelfTab, setShowSelfTab] = useState(true); 
+  const [disableSelfSave, setDisableSelfSave] = useState(false); 
+  const [isValidJobLevel, setIsValidJobLevel] = useState(false); 
+  const [jobLevel, setJobLevel] = useState(""); 
+  const requestToken = localStorage.getItem("request_token");
+
+  useEffect(() => {
+    checkJobLevel(); 
+    
+    fetchExistingCompetencies(activeTab);
+  }, [activeTab, isValidJobLevel]);
+
+ 
+  const checkJobLevel = () => {
+    const jobLevel = localStorage.getItem("JobLevel");
+    setJobLevel(jobLevel);
+
+    if (
+      ["03", "04", "04A", "04B", "02A", "02", "01A", "01"].includes(jobLevel)
+    ) {
+      setShowSuperiorTab(true);
+      setShowSelfTab(true); 
+      setDisableSelfSave(false); 
+      setIsValidJobLevel(true); 
+    } else {
+      setShowSuperiorTab(false); 
+      setShowSelfTab(true); 
+      setDisableSelfSave(false); 
+      setIsValidJobLevel(false);
+    }
+  };
+
+  const fetchExistingCompetencies = async (tab) => {
+    const serviceNo = localStorage.getItem("serviceNo");
+    const username = localStorage.getItem("username");
+    const userType = localStorage.getItem("userType") || "NonEx";
+    const year = localStorage.getItem("year");
+    const period = localStorage.getItem("period") || "2";
+    const jobLevel = localStorage.getItem("JobLevel");
+    
+    
+    const status = tab === "self" ? "S" : "D";
+    
+   
+    if (tab === "superior" && !isValidJobLevel) {
+      setIsLoading(false);
+      return;
+    }
+  
+    try {
+     
+      const targetServiceNo = tab === "self" ? username : serviceNo;
+      
+      const apiUrl = `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetCompetenciesDetails?serviceNo=${targetServiceNo}&UserType=${userType}&period=${period}&year=${year}&status=${status}&joblevel=${jobLevel}`;
+      
+      const response = await fetch(apiUrl, {
+        headers: {
+          request_token: requestToken,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${tab} competencies`);
+      }
+  
+      const data = await response.json();
+  
+      if (!data.ResultSet || !Array.isArray(data.ResultSet)) {
+        throw new Error("Invalid response format");
+      }
+  
+      const formattedSelections = {};
+      data.ResultSet.forEach((item) => {
+        evaluationCriteria.forEach((category) => {
+          category.subCategories.forEach((subCategory) => {
+            const subCategoryCode = subCategory.title.split(".")[0];
+            if (subCategoryCode === item.Com_Code) {
+              const scoreIndex = parseInt(item.Com_Score) - 1;
+              formattedSelections[subCategory.title] = scoreIndex;
+            }
+          });
+        });
+      });
+  
+      if (tab === "self") {
+        setSelfSelections(formattedSelections);
+      } else {
+        setSuperiorSelections(formattedSelections);
+      }
+    } catch (error) {
+      console.error(`Error fetching ${tab} competencies:`, error);
+      Swal.fire({
+        title: "Error!",
+        text: `Failed to fetch ${tab} competencies. Please try again.`,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSelection = (subCategoryTitle, optionIndex) => {
+    if (activeTab === "self") {
+      setSelfSelections((prev) => ({
+        ...prev,
+        [subCategoryTitle]: optionIndex,
+      }));
+    } else {
+      setSuperiorSelections((prev) => ({
+        ...prev,
+        [subCategoryTitle]: optionIndex,
+      }));
+    }
+  };
+
+  const handleSave = async () => {
+    const serviceNo = localStorage.getItem("serviceNo");
+    const userType = localStorage.getItem("userType") || "EX";
+    const year = localStorage.getItem("year");
+    const username = localStorage.getItem("username");
+    const period = localStorage.getItem("period") || "2";
+    // Determine the status based on activeTab
+    const status = activeTab === "self" ? "S" : "D";
+
+    try {
+      setIsSaving(true);
+      const selections =
+        activeTab === "self" ? selfSelections : superiorSelections;
+      const formattedData = Object.entries(selections).map(([title, score]) => {
+        const comCode = title.split(".")[0];
+        const comScore = (score + 1).toString();
+        return {
+          Com_Code: comCode,
+          Com_Score: comScore,
+        };
+      });
+
+      // Use different endpoints based on the active tab
+      let endpoint;
+      if (activeTab === "self") {
+        // New endpoint for self appraisal
+        endpoint = `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/SaveCompetenciesDetails?UserType=${userType}&serviceNo=${username}&year=${year}&peroid=${period}&status=${status}&joblevel=${jobLevel}`;
+      } else {
+        // Existing endpoint for superior appraisal with job level
+        endpoint = `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/SaveCompetenciesDetails?UserType=${userType}&serviceNo=${serviceNo}&year=${year}&peroid=${period}&joblevel=${jobLevel}&status=${status}`;
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          request_token: requestToken,
+        },
+        body: JSON.stringify(formattedData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save ${activeTab} competencies`);
+      }
+
+      Swal.fire({
+        title: "Success!",
+        text: `${activeTab === "self" ? "Self" : "Superior"} competencies saved successfully.`,
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        window.location.reload();
+      });
+    } catch (error) {
+      console.error(`Error saving ${activeTab} competencies:`, error);
+      Swal.fire({
+        title: "Error!",
+        text: `Failed to save ${activeTab} competencies. Please try again.`,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+
   const getCategoryColor = (category) => {
     switch (category) {
       case "Achievement Orientation":
@@ -42,161 +207,6 @@ const CompetenciesModal = ({ closePopup, toggleModal }) => {
         return "text-black";
     }
   };
-  const [initialSelections, setInitialSelections] = useState({});
-  const [selectedOptions, setSelectedOptions] = useState({});
-  const [disabledOptions, setDisabledOptions] = useState({});
-  const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const requestToken = localStorage.getItem("request_token");
-
-  useEffect(() => {
-    fetchExistingCompetencies();
-  }, []);
-
-  const fetchExistingCompetencies = async () => {
-    const serviceNo = localStorage.getItem("serviceNo");
-    const userType = localStorage.getItem("userType") || "NonEx";
-    const year = localStorage.getItem("year");
-    const period = localStorage.getItem("period") || "2";
-    
-    try {
-      const response = await fetch(
-        `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/GetCompetenciesDetails?serviceNo=${serviceNo}&UserType=${userType}&period=${period}&year=${year}`,
-        {
-          headers: {
-            request_token: requestToken,
-          },
-        }
-      );
-    
-      if (!response.ok) {
-        throw new Error("Failed to fetch competencies");
-      }
-    
-      const data = await response.json();
-      
-      if (!data.ResultSet || !Array.isArray(data.ResultSet)) {
-        throw new Error("Invalid response format");
-      }
-
-      const formattedSelections = {};
-      const initialSelectionsData = {};
-  
-      // Process each competency from the API response
-      data.ResultSet.forEach((item) => {
-        evaluationCriteria.forEach((category) => {
-          category.subCategories.forEach((subCategory) => {
-            const subCategoryCode = subCategory.title.split(".")[0];
-            
-            if (subCategoryCode === item.Com_Code) {
-              const scoreIndex = parseInt(item.Com_Score) - 1;
-              formattedSelections[subCategory.title] = scoreIndex;
-              initialSelectionsData[subCategory.title] = scoreIndex;
-            }
-          });
-        });
-      });
-  
-      setSelectedOptions(formattedSelections);
-      setInitialSelections(initialSelectionsData); // Store initial selections separately
-      
-    } catch (error) {
-      console.error("Error fetching competencies:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to fetch competencies. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  
-  const handleSelection = (subCategoryTitle, optionIndex) => {
-    setSelectedOptions(prev => ({
-      ...prev,
-      [subCategoryTitle]: optionIndex
-    }));
-  };
-
-  const isOptionInitiallySelected = (subCategoryTitle, optionIndex) => {
-    return initialSelections[subCategoryTitle] === optionIndex;
-  };
-  
-  const formatDataForAPI = () => {
-    return Object.entries(selectedOptions).map(([title, score]) => {
-      const comCode = title.split('.')[0];
-      const comScore = (score + 1).toString();
-      
-      return {
-        Com_Code: comCode,
-        Com_Score: comScore
-      };
-    });
-  };
-
-
-
-const handleSave = async () => {
-  const serviceNo = localStorage.getItem("serviceNo");
-  const userType = localStorage.getItem("userType") || "EX";
-  const year = localStorage.getItem("year");
-  const period = localStorage.getItem("period") || "2";
-
-  try {
-    setIsSaving(true);
-    const formattedData = formatDataForAPI();
-
-    const response = await fetch(
-      `https://esystems.cdl.lk/backend/PerformanceEvaluationNew/Evaluation/SaveCompetenciesDetails?UserType=${userType}&serviceNo=${serviceNo}&year=${year}&peroid=${period}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          request_token: requestToken,
-        },
-        body: JSON.stringify(formattedData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to save competencies");
-    }
-
-    const data = await response.json();
-    console.log("Save successful:", data);
-
-    await fetchExistingCompetencies();
-    closePopup();
-
-    // Success alert with SweetAlert2
-    Swal.fire({
-      title: "Success!",
-      text: "Competencies saved successfully.",
-      icon: "success",
-      confirmButtonText: "OK",
-    }).then(() => {
-      window.location.reload(); // Reload page after clicking OK
-    });
-
-  } catch (error) {
-    console.error("Error saving competencies:", error);
-    
-    // Error alert with SweetAlert2
-    Swal.fire({
-      title: "Error!",
-      text: "Failed to save competencies. Please try again.",
-      icon: "error",
-      confirmButtonText: "OK",
-    });
-  } finally {
-    setIsSaving(false);
-  }
-};
-
-
 
   const evaluationCriteria = [
     {
@@ -358,8 +368,8 @@ const handleSave = async () => {
             "1: Lacks alignment with organizational goals; frequently disengaged or indifferent to company objectives.",
             "2: Shows occasional misalignment with organizational values or objectives; loyalty to the organization is inconsistent.",
             "3: Aligns personal and team goals with organizational objectives; demonstrates loyalty to the company and supports its mission.",
-            "4: Regularly contributes to aligning team performance with company objectives; shows strong loyalty and commitment to the organization’s success.",
-            "5: Acts as a key advocate for the organization’s values and vision; consistently works to align the team’s goals with those of the company and drives loyalty among others.",
+            "4: Regularly contributes to aligning team performance with company objectives; shows strong loyalty and commitment to the organization's success.",
+            "5: Acts as a key advocate for the organization's values and vision; consistently works to align the team's goals with those of the company and drives loyalty among others.",
           ],
         },
         {
@@ -369,7 +379,7 @@ const handleSave = async () => {
             "2: Inconsistent professionalism; stakeholder relationships may be weak or strained at times.",
             "3: Demonstrates professionalism in interactions with all stakeholders; maintains positive and productive working relationships.",
             "4: Regularly demonstrates high levels of professionalism; fosters strong, productive relationships with both internal and external stakeholders.",
-            "5: Exemplifies professionalism in all aspects; builds and maintains exceptional relationships with stakeholders, enhancing the company’s reputation.",
+            "5: Exemplifies professionalism in all aspects; builds and maintains exceptional relationships with stakeholders, enhancing the company's reputation.",
           ],
         },
         {
@@ -432,63 +442,116 @@ const handleSave = async () => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="relative bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-4xl overflow-y-auto max-h-[90vh]">
-      <button
-        className="absolute top-2 right-2 text-red-500 text-2xl font-bold focus:outline-none"
-        onClick={closePopup}
-      >
-        &times;
-      </button>
-      <h2 className="text-xl font-bold mb-4">Competencies Evaluation</h2>
-      <div>
-        {evaluationCriteria.map((criteria, index) => (
-          <div key={index} className="mb-6">
-            <h2 className={`font-bold text-lg ${getCategoryColor(criteria.category)}`}>
-              {criteria.category}
-            </h2>
-            {criteria.subCategories.map((subCategory, subIndex) => (
-  <div key={subIndex} className="mb-4">
-    <h4 className="text-md font-medium mb-2">{subCategory.title}</h4>
-    {subCategory.options.map((option, optIndex) => (
-      <label key={optIndex} className="flex items-center space-x-2 mb-1">
-        <input
-          type="radio"
-          name={subCategory.title}
-          checked={selectedOptions[subCategory.title] === optIndex} // Ensure this is correctly set
-          onChange={() => handleSelection(subCategory.title, optIndex)} // Handle the change properly
-          className="form-radio"
-          disabled={disabledOptions[subCategory.title]?.includes(optIndex)} // Disable based on options
-        />
-        <span>{option}</span>
-      </label>
-    ))}
-  </div>
-))}
-
-          </div>
-        ))}
-      </div>
-      <div className="flex mt-6 justify-end">
+      <div className="relative bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-4xl overflow-y-auto max-h-[90vh]">
         <button
-          className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 ${
-            isSaving ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handleSave}
-          disabled={isSaving}
-        >
-          {isSaving ? "Saving..." : "Save"}
-        </button>
-        <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="absolute top-2 right-2 text-red-500 text-2xl font-bold focus:outline-none"
           onClick={closePopup}
         >
-          Close
+          &times;
         </button>
+        <h2 className="text-xl font-bold mb-4">Competencies Evaluation</h2>
+
+        {/* Tab Navigation */}
+        <div className="flex mb-4 border-b">
+          {showSelfTab && (
+            <button
+              className={`px-4 py-2 ${
+                activeTab === "self"
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("self")}
+            >
+              Self Appraisal
+            </button>
+          )}
+          {showSuperiorTab && (
+            <button
+              className={`px-4 py-2 ${
+                activeTab === "superior"
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("superior")}
+            >
+              Superior Appraisal
+            </button>
+          )}
+        </div>
+
+        {/* Content Based on Active Tab */}
+        <div>
+          {evaluationCriteria.map((criteria, index) => (
+            <div key={index} className="mb-6">
+              <h2
+                className={`font-bold text-lg ${getCategoryColor(
+                  criteria.category
+                )}`}
+              >
+                {criteria.category}
+              </h2>
+              {criteria.subCategories.map((subCategory, subIndex) => (
+                <div key={subIndex} className="mb-4">
+                  <h4 className="text-md font-medium mb-2">
+                    {subCategory.title}
+                  </h4>
+                  {subCategory.options.map((option, optIndex) => (
+                    <label
+                      key={optIndex}
+                      className="flex items-center space-x-2 mb-1"
+                    >
+                      <input
+                        type="radio"
+                        name={subCategory.title}
+                        checked={
+                          (activeTab === "self"
+                            ? selfSelections[subCategory.title]
+                            : superiorSelections[subCategory.title]) ===
+                          optIndex
+                        }
+                        onChange={() =>
+                          handleSelection(subCategory.title, optIndex)
+                        }
+                        className="form-radio"
+                        disabled={
+                          (activeTab === "superior" && !showSuperiorTab)
+                        }
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex mt-6 justify-end">
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded mr-2 ${
+              isSaving ||
+              (activeTab === "superior" && !showSuperiorTab)
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            onClick={handleSave}
+            disabled={
+              isSaving ||
+              (activeTab === "superior" && !showSuperiorTab)
+            }
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </button>
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded"
+            onClick={closePopup}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   );
 };
-
 
 export default CompetenciesModal;

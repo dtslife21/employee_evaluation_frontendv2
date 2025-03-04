@@ -520,7 +520,6 @@
 
 
 
-
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -567,16 +566,22 @@ const EMPModal = ({ isModalOpen, toggleModal, onEmployeeSelect }) => {
           request_token,
         },
       });
-
+  
       if (response.data.StatusCode === 200 && response.data.ResultSet) {
         const employeeData = {
           ...response.data.ResultSet,
           ServiceNo: serviceNo,
           EvaluationStatus: evaluationStatus,
         };
-        onEmployeeSelect(employeeData); // This will pass the full employee data to the parent
+  
+        
+        localStorage.setItem("DivisionCode", employeeData.DivisionCode);
+        localStorage.setItem("DepartmentCode", employeeData.DepartmentCode);
+        localStorage.setItem("LocationCode", employeeData.LocationCode);
+  
+        onEmployeeSelect(employeeData);
         toggleModal();
-        window.location.reload(); // Refresh the page after modal is toggled
+        window.location.reload();
       } else {
         setError("Failed to load employee details");
       }
@@ -586,6 +591,7 @@ const EMPModal = ({ isModalOpen, toggleModal, onEmployeeSelect }) => {
     }
     setIsLoading(false);
   };
+  
 
 
   const loadDivisions = async () => {
